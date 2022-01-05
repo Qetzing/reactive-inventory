@@ -1,0 +1,70 @@
+plugins {
+  id 'java'
+  id 'maven-publish'
+}
+
+group 'de.qetz'
+version '1.0.0'
+
+repositories {
+  mavenCentral()
+  maven {
+    url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+  }
+  maven {
+    url 'https://repo.qetz.de/artifactory/repo-public'
+    metadataSources {
+      mavenPom()
+      gradleMetadata()
+      artifact()
+    }
+  }
+}
+
+ext {
+  componentsCoreVersion = '1.0.1'
+
+  spigotVersion = '1.16.5-R0.1-SNAPSHOT'
+  guiceVersion = '5.0.1'
+
+  lombokVersion = '1.18.22'
+
+  junitVersion = '5.8.2'
+}
+
+dependencies {
+  implementation "de.qetz:components-core:$componentsCoreVersion"
+
+  compileOnly "org.spigotmc:spigot-api:$spigotVersion"
+  implementation "com.google.inject:guice:$guiceVersion"
+
+  implementation "org.projectlombok:lombok:$lombokVersion"
+  annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+  implementation "org.projectlombok:lombok:$lombokVersion"
+  testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+  testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+  testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from(components.java)
+    }
+  }
+  repositories {
+    maven {
+      url = 'https://repo.qetz.de/artifactory/qetz'
+
+      credentials {
+        username = System.getenv('qetzUser')
+        password = System.getenv('qetzPassword')
+      }
+    }
+  }
+}
+
+test {
+  useJUnitPlatform()
+}
