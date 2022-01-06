@@ -2,6 +2,8 @@ package qetz.inventory.open;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import qetz.inventory.Inventory;
 
 import java.util.UUID;
@@ -12,6 +14,7 @@ public final class OpenedInventoryFactory {
   private final Injector injector;
 
   private Inventory inventory;
+  private Plugin plugin;
   private UUID userId;
 
   @Inject
@@ -42,6 +45,11 @@ public final class OpenedInventoryFactory {
     return this;
   }
 
+  public OpenedInventoryFactory openSynchronized(Plugin plugin) {
+    this.plugin = plugin;
+    return this;
+  }
+
   public OpenedInventory apply() {
     var openedInventory = createOpenedInventory();
     keepUpAndOpen(openedInventory);
@@ -49,8 +57,15 @@ public final class OpenedInventoryFactory {
   }
 
   private void keepUpAndOpen(OpenedInventory openedInventory) {
-    openedInventoryRepository.keepUpInventory(userId, openedInventory);
-    openedInventory.openInventory();
+    if (plugin == null) {
+      openedInventoryRepository.keepUpInventory(userId, openedInventory);
+      openedInventory.openInventory();
+      return;
+    }
+    Bukkit.getScheduler().runTask(plugin, () -> {
+      openedInventoryRepository.keepUpInventory(userId, openedInventory);
+      openedInventory.openInventory();
+    });
   }
 
   private OpenedInventory createOpenedInventory() {
