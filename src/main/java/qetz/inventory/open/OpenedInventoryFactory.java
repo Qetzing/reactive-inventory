@@ -1,6 +1,7 @@
 package qetz.inventory.open;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import qetz.inventory.Inventory;
 
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 public final class OpenedInventoryFactory {
   private final KeepOpenedInventoryRepository keepOpenedInventoryRepository;
   private final OpenedInventoryRepository openedInventoryRepository;
+  private final Injector injector;
 
   private Inventory inventory;
   private UUID userId;
@@ -15,14 +17,23 @@ public final class OpenedInventoryFactory {
   @Inject
   private OpenedInventoryFactory(
     KeepOpenedInventoryRepository keepOpenedInventoryRepository,
-    OpenedInventoryRepository openedInventoryRepository
+    OpenedInventoryRepository openedInventoryRepository,
+    Injector injector
   ) {
     this.keepOpenedInventoryRepository = keepOpenedInventoryRepository;
     this.openedInventoryRepository = openedInventoryRepository;
+    this.injector = injector;
   }
 
   public OpenedInventoryFactory withUserId(UUID userId) {
     this.userId = userId;
+    return this;
+  }
+
+  public OpenedInventoryFactory withInjectableInventory(
+    Class<? extends Inventory> inventory
+  ) {
+    this.inventory = injector.getInstance(inventory);
     return this;
   }
 

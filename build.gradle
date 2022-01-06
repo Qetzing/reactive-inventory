@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'de.qetz'
-version '1.0.0'
+version '1.0.1'
 
 repositories {
   mavenCentral()
@@ -50,12 +50,15 @@ dependencies {
 publishing {
   publications {
     maven(MavenPublication) {
+      groupId = 'de.qetz'
+      artifactId = 'inventory'
+
       from(components.java)
     }
   }
   repositories {
     maven {
-      url = 'https://repo.qetz.de/artifactory/qetz'
+      url = 'https://repo.qetz.de/artifactory/repo-public'
 
       credentials {
         username = System.getenv('qetzUser')
