@@ -57,4 +57,14 @@ public final class OpenedInventoryRepository {
       .findAny()
       .ifPresent(OpenedInventory::triggerInventoryTypeUpdate);
   }
+
+  public void closeInventoryByType(
+    Class<? extends Inventory> inventoryType
+  ) {
+    Preconditions.checkNotNull(inventoryType, "inventoryType");
+    inventories.values().stream()
+      .filter(inventory -> inventory.matchesInventory(inventoryType))
+      .findAny()
+      .ifPresent(OpenedInventory::closeInventory);
+  }
 }

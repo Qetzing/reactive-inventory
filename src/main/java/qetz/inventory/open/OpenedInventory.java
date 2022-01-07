@@ -44,6 +44,13 @@ public final class OpenedInventory {
     openInventory();
   }
 
+  public void closeInventory() {
+    var target = Bukkit.getPlayer(userId);
+    if (target != null) {
+      target.closeInventory();
+    }
+  }
+
   public boolean matchesInventory(
     Class<? extends Inventory> comparableInventory
   ) {
