@@ -4,11 +4,13 @@ import com.google.common.base.Preconditions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import qetz.inventory.BukkitInventory;
 import qetz.inventory.Inventory;
-import qetz.inventory.ReactiveBukkitInventory;
+import qetz.inventory.PolicyRestrictedInventory;
+import qetz.inventory.ReactiveInventory;
 
 import java.util.UUID;
+
+import static qetz.inventory.Inventory.isEventValid;
 
 public final class OpenedInventory {
   private final KeepOpenedInventoryRepository keepOpenedInventoryRepository;
@@ -66,18 +68,19 @@ public final class OpenedInventory {
 
   public boolean continueAndApplyPolicies(InventoryClickEvent click) {
     Preconditions.checkNotNull(click, "click");
-    if (inventory instanceof BukkitInventory policyApplicableInventory
-      && policyApplicableInventory.continueWithEvent(click)
+    if (
+      inventory instanceof PolicyRestrictedInventory restrictedInventory
+        && isEventValid(click)
     ) {
-      policyApplicableInventory.applyPolicies(click);
+      restrictedInventory.applyPolicies(click);
       return true;
     }
     return false;
   }
 
-  public void triggerInventoryTypeUpdate() {
-    if (inventory instanceof ReactiveBukkitInventory reactiveInventory) {
-      reactiveInventory.triggerUpdate();
+  public void triggerInventoryTypeUpdate(OpenedInventoryRepository repository) {
+    if (inventory instanceof ReactiveInventory reactiveInventory) {
+      reactiveInventory.triggerUpdate(repository);
     }
   }
 

@@ -55,7 +55,7 @@ public final class OpenedInventoryRepository {
     inventories.values().stream()
       .filter(inventory -> inventory.matchesInventory(inventoryType))
       .findAny()
-      .ifPresent(OpenedInventory::triggerInventoryTypeUpdate);
+      .ifPresent(inventory -> inventory.triggerInventoryTypeUpdate(this));
   }
 
   public void closeInventoryByType(
