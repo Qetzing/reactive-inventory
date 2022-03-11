@@ -25,7 +25,7 @@ ext {
   componentsCoreVersion = '1.0.1'
 
   spigotVersion = '1.16.5-R0.1-SNAPSHOT'
-  guiceVersion = '5.0.1'
+  guiceVersion = '5.1.0'
 
   lombokVersion = '1.18.22'
 
