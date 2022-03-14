@@ -26,6 +26,10 @@ public final class OpenInventory {
   private final Inventory inventory;
   private final UUID userId;
 
+  UUID userId() {
+    return userId;
+  }
+
   void open() {
     inventory.open(target());
   }
@@ -42,7 +46,7 @@ public final class OpenInventory {
     target().closeInventory();
   }
 
-  public void triggerUpdate() {
+  void update() {
     if (inventory instanceof ReactiveInventory reactive) {
       var target = target();
       reactive.openUpdated(target);
@@ -54,7 +58,7 @@ public final class OpenInventory {
     return inventory.getClass().isAssignableFrom(type);
   }
 
-  public void triggerInteract(InventoryClickEvent click) {
+  void triggerInteract(InventoryClickEvent click) {
     Preconditions.checkNotNull(click, "click");
     applyPolicies(click);
     callInventoryInteraction(click);

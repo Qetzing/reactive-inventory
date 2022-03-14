@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import qetz.components.Component;
+import qetz.inventory.actions.DefaultActions;
 import qetz.inventory.open.OpenInventoryRepository;
 
 import static qetz.inventory.Inventory.isEventValid;
@@ -15,6 +16,7 @@ import static qetz.inventory.Inventory.isEventValid;
 @Component
 public final class  InventoryInteractTrigger implements Listener {
   private final OpenInventoryRepository openInventories;
+  private final DefaultActions actions;
 
   @EventHandler
   private void callInventoryInteract(InventoryClickEvent click) {
@@ -24,6 +26,6 @@ public final class  InventoryInteractTrigger implements Listener {
       return;
     }
 
-    openInventories.findById(userId).ifPresent(open -> open.triggerInteract(click));
+    openInventories.performActionOnId(actions.triggerInteract(click), userId);
   }
 }
