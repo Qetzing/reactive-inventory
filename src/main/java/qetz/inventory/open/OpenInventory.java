@@ -17,7 +17,7 @@ import static qetz.inventory.PolicyRestrictedInventory.*;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OpenInventory {
-  public static OpenInventory with(Inventory inventory, UUID userId) {
+  static OpenInventory with(Inventory inventory, UUID userId) {
     Preconditions.checkNotNull(inventory, "inventory");
     Preconditions.checkNotNull(userId, "userId");
     return new OpenInventory(inventory, userId);
