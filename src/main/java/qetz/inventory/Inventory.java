@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import java.util.UUID;
 
 public interface Inventory {
-  void atInteract(InventoryClickEvent click, Player target, UUID userId);
+  void interact(InventoryClickEvent click, Player target, UUID userId);
   void open(Player target);
 
   @SuppressWarnings("ConstantConditions")

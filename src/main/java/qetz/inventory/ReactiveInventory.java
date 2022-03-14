@@ -1,14 +1,7 @@
 package qetz.inventory;
 
-import qetz.inventory.open.OpenedInventoryRepository;
+import org.bukkit.entity.Player;
 
 public interface ReactiveInventory extends Inventory {
-  default void triggerUpdate(
-    OpenedInventoryRepository openedInventoryRepository
-  ) {
-    var openInventories = openedInventoryRepository.findWithSameType(getClass());
-    for (var openInventory : openInventories) {
-      openInventory.reopenInventory();
-    }
-  }
+  void openUpdated(Player target);
 }
