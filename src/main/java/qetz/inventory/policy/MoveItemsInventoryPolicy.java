@@ -6,14 +6,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum MoveItemsInventoryPolicy implements InventoryPolicy {
-  ALLOW,
-  DENY;
+  Allow,
+  Deny;
 
   @Override
   public void apply(InventoryClickEvent click) {
     switch (this) {
-      case ALLOW -> click.setCancelled(false);
-      case DENY -> click.setCancelled(true);
+      case Allow -> click.setCancelled(false);
+      case Deny -> click.setCancelled(true);
     }
   }
 }
