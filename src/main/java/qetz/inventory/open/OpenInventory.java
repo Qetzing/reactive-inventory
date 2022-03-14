@@ -26,6 +26,10 @@ public final class OpenInventory {
   private final Inventory inventory;
   private final UUID userId;
 
+  UUID userId() {
+    return userId;
+  }
+
   void open() {
     inventory.open(target());
   }
@@ -42,7 +46,7 @@ public final class OpenInventory {
     target().closeInventory();
   }
 
-  public void triggerUpdate() {
+  void triggerUpdate() {
     if (inventory instanceof ReactiveInventory reactive) {
       var target = target();
       reactive.openUpdated(target);
