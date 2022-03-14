@@ -5,11 +5,13 @@ import com.google.common.collect.Maps;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import qetz.inventory.Inventory;
+import qetz.inventory.actions.InventoryAction;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,7 +26,7 @@ public final class OpenInventoryRepository {
     Preconditions.checkNotNull(userId, "userId");
     Preconditions.checkNotNull(openInventory, "openInventory");
     Preconditions.checkArgument(
-      findById(userId).isEmpty(),
+      !inventories.containsKey(userId),
       "player already has an opened inventory"
     );
     inventories.put(userId, openInventory);
@@ -35,15 +37,28 @@ public final class OpenInventoryRepository {
     inventories.remove(userId);
   }
 
-  public Optional<OpenInventory> findById(UUID userId) {
+  public void performActionOnId(InventoryAction action, UUID userId) {
+    Preconditions.checkNotNull(action, "action");
     Preconditions.checkNotNull(userId, "userId");
-    return Optional.ofNullable(inventories.get(userId));
+    Optional.ofNullable(inventories.get(userId)).ifPresent(
+      inventory -> performAction(inventory, action)
+    );
   }
 
-  public Collection<OpenInventory> findByType(Class<? extends Inventory> type) {
+  private void performAction(OpenInventory inventory, InventoryAction action) {
+    action.asExecutable()
+      .withTarget(inventory)
+      .perform();
+  }
+
+  public void performActionOnType(
+    Class<? extends Inventory> type,
+    InventoryAction action
+  ) {
     Preconditions.checkNotNull(type, "type");
-    return inventories.values().stream()
+    Preconditions.checkNotNull(action, "action");
+    inventories.values().stream()
       .filter(inventory -> inventory.isType(type))
-      .collect(Collectors.toList());
+      .forEach(inventory -> performAction(inventory, action));
   }
 }
