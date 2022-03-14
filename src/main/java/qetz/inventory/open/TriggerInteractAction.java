@@ -4,22 +4,27 @@ import com.google.common.base.Preconditions;
 import com.google.inject.Inject;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import qetz.inventory.actions.InventoryAction;
 
-import java.util.Collection;
-
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @Inject)
-public final class CloseAction implements InventoryAction {
-  private final OpenInventoryRepository repository;
+public final class TriggerInteractAction implements InventoryAction {
+  private InventoryClickEvent click;
+
+  public TriggerInteractAction withInventoryClick(InventoryClickEvent click) {
+    this.click = click;
+    return this;
+  }
 
   @Override
   public ExecutableAction asExecutable() {
-    return new CloseExecutable(repository);
+    Preconditions.checkNotNull(click, "click");
+    return new InteractExecutable(click);
   }
 
   @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-  public static final class CloseExecutable implements ExecutableAction {
-    private final OpenInventoryRepository repository;
+  public static final class InteractExecutable implements ExecutableAction {
+    private final InventoryClickEvent click;
 
     private OpenInventory inventory;
 
@@ -32,8 +37,7 @@ public final class CloseAction implements InventoryAction {
     @Override
     public void perform() {
       Preconditions.checkNotNull(inventory, "inventory");
-      repository.remove(inventory.userId());
-      inventory.close();
+      inventory.triggerInteract(click);
     }
   }
 }
