@@ -31,7 +31,7 @@ public final class TriggerInteractAction implements InventoryAction {
     @Override
     public ExecutableAction withTarget(OpenInventory inventory) {
       this.inventory = inventory;
-      return null;
+      return this;
     }
 
     @Override
