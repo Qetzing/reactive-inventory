@@ -26,6 +26,6 @@ public final class  InventoryInteractTrigger implements Listener {
       return;
     }
 
-    openInventories.performActionOnId(actions.triggerInteract(click), userId);
+    openInventories.performActionForUser(actions.triggerInteract(click), userId);
   }
 }

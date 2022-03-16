@@ -7,12 +7,9 @@ import lombok.RequiredArgsConstructor;
 import qetz.inventory.Inventory;
 import qetz.inventory.actions.InventoryAction;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OpenInventoryRepository {
@@ -37,7 +34,7 @@ public final class OpenInventoryRepository {
     inventories.remove(userId);
   }
 
-  public void performActionOnId(InventoryAction action, UUID userId) {
+  public void performActionForUser(InventoryAction action, UUID userId) {
     Preconditions.checkNotNull(action, "action");
     Preconditions.checkNotNull(userId, "userId");
     Optional.ofNullable(inventories.get(userId)).ifPresent(
