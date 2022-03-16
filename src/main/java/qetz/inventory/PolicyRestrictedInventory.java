@@ -5,7 +5,7 @@ import qetz.inventory.policy.InventoryPolicy;
 
 import java.util.Set;
 
-public interface PolicyRestrictedInventory extends Inventory {
+public interface PolicyRestrictedInventory {
   Set<InventoryPolicy> policies();
 
   static void applySet(Set<InventoryPolicy> policies, InventoryClickEvent click) {
