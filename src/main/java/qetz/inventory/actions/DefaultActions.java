@@ -7,14 +7,20 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import qetz.inventory.open.CloseAction;
 import qetz.inventory.open.TriggerInteractAction;
+import qetz.inventory.open.TriggerUpdateAction;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @Inject)
 public final class DefaultActions {
   private final TriggerInteractAction interact;
+  private final TriggerUpdateAction update;
   private final CloseAction close;
 
   public CloseAction close() {
     return close;
+  }
+
+  public TriggerUpdateAction update() {
+    return update;
   }
 
   public TriggerInteractAction triggerInteract(InventoryClickEvent click) {
