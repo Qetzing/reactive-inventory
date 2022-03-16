@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public enum MoveItemsInventoryPolicy implements InventoryPolicy {
+public enum MoveItemsPolicy implements InventoryPolicy {
   Allow,
   Deny;
 
