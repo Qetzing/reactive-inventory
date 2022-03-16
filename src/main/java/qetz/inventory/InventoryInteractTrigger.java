@@ -1,4 +1,4 @@
-package qetz.inventory.call;
+package qetz.inventory;
 
 import com.google.inject.Inject;
 import lombok.AccessLevel;
@@ -7,22 +7,25 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import qetz.components.Component;
-import qetz.inventory.open.OpenedInventoryRepository;
+import qetz.inventory.actions.DefaultActions;
+import qetz.inventory.open.OpenInventoryRepository;
 
-@Component
+import static qetz.inventory.Inventory.isEventValid;
+
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE, onConstructor_ = @Inject)
-public final class InventoryInteractCallListener implements Listener {
-  private final OpenedInventoryRepository openedInventoryRepository;
+@Component
+public final class  InventoryInteractTrigger implements Listener {
+  private final OpenInventoryRepository openInventories;
+  private final DefaultActions actions;
 
   @EventHandler
   private void callInventoryInteract(InventoryClickEvent click) {
     var userId = click.getWhoClicked().getUniqueId();
 
-    openedInventoryRepository.findOpenedInventory(userId)
-      .ifPresent(openedInventory -> {
-        if (openedInventory.continueAndApplyPolicies(click)) {
-          openedInventory.triggerInteract(click);
-        }
-      });
+    if (!isEventValid(click)) {
+      return;
+    }
+
+    openInventories.performActionForUser(actions.triggerInteract(click), userId);
   }
 }

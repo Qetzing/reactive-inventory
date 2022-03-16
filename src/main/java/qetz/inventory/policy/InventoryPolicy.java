@@ -1,3 +1,7 @@
 package qetz.inventory.policy;
 
-public interface InventoryPolicy {}
+import org.bukkit.event.inventory.InventoryClickEvent;
+
+public interface InventoryPolicy {
+  void apply(InventoryClickEvent click);
+}
